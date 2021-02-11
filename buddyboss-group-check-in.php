@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: BuddyBoss Group Check-in
- * Description: Addon of BuddyBoss with group check-in functionality
+ * Description: Custom addon of BuddyBoss with group check-in functionality
  * Version:     1.0.0
- * Text Domain: buddyboss-group-check-in
+ * Text Domain: bp-group-check-in
  * Domain Path: /languages/
  */
 
@@ -15,31 +15,52 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'BGCI_BB_Platform_Addon' ) ) {
+/**
+ * Define WCE Constants
+ */
+	define_constants( 'BPGCI_ADDON_PLUGIN_FILE', __FILE__ );
+	define_constants( 'BPGCI_ADDON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+	define_constants( 'BPGCI_ADDON_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+	define_constants( 'BPGCI_ADDON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * Define constant if not already set
+ * @param  string $name
+ * @param  string|bool $value
+ */
+function define_constants( $name, $value ) {
+	if ( ! defined( $name ) ) {
+		define( $name, $value );
+	}
+}
+
+include_once( 'activation.php' );
+
+if ( ! class_exists( 'BPGCI_Addon' ) ) {
 
 	/**
 	 * Main MYPlugin Custom Emails Class
 	 *
-	 * @class BGCI_BB_Platform_Addon
+	 * @class BPGCI_Addon
 	 * @version	1.0.0
 	 */
-	final class BGCI_BB_Platform_Addon {
+	final class BPGCI_Addon {
 
 		/**
-		 * @var BGCI_BB_Platform_Addon The single instance of the class
+		 * @var BPGCI_Addon The single instance of the class
 		 * @since 1.0.0
 		 */
 		protected static $_instance = null;
 
 		/**
-		 * Main BGCI_BB_Platform_Addon Instance
+		 * Main BPGCI_Addon Instance
 		 *
-		 * Ensures only one instance of BGCI_BB_Platform_Addon is loaded or can be loaded.
+		 * Ensures only one instance of BPGCI_Addon is loaded or can be loaded.
 		 *
 		 * @since 1.0.0
 		 * @static
-		 * @see BGCI_BB_Platform_Addon()
-		 * @return BGCI_BB_Platform_Addon - Main instance
+		 * @see BPGCI_Addon()
+		 * @return BPGCI_Addon - Main instance
 		 */
 		public static function instance() {
 			if ( is_null( self::$_instance ) ) {
@@ -64,41 +85,28 @@ if ( ! class_exists( 'BGCI_BB_Platform_Addon' ) ) {
 		}
 
 		/**
-		 * BGCI_BB_Platform_Addon Constructor.
+		 * BPGCI_Addon Constructor.
 		 */
 		public function __construct() {
-			$this->define_constants();
-			$this->includes();
+			$this->requires();
+
+			// Add link to settings page.
+			add_filter( 'plugin_action_links',               array( $this, 'action_links' ), 10, 2 );
+			add_filter( 'network_admin_plugin_action_links', array( $this, 'action_links' ), 10, 2 );
+
 			// Set up localisation.
 			$this->load_plugin_textdomain();
 		}
 
 		/**
-		 * Define WCE Constants
-		 */
-		private function define_constants() {
-			$this->define( 'BGCI_BB_ADDON_PLUGIN_FILE', __FILE__ );
-			$this->define( 'BGCI_BB_ADDON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-			$this->define( 'BGCI_BB_ADDON_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-			$this->define( 'BGCI_BB_ADDON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-		}
-
-		/**
-		 * Define constant if not already set
-		 * @param  string $name
-		 * @param  string|bool $value
-		 */
-		private function define( $name, $value ) {
-			if ( ! defined( $name ) ) {
-				define( $name, $value );
-			}
-		}
-
-		/**
 		 * Include required core files used in admin and on the frontend.
 		 */
-		public function includes() {
-			include_once( 'functions.php' );
+		public function requires() {
+			require_once( 'admin/enqueue-scripts.php' );
+			require_once( 'admin/settings.php' );
+			require_once( 'admin/reports.php' );
+			require_once( 'view/shortcode.php' );
+			//require_once( 'admin-option.php' );
 		}
 
 		/**
@@ -130,52 +138,70 @@ if ( ! class_exists( 'BGCI_BB_Platform_Addon' ) ) {
 			load_textdomain( '', WP_LANG_DIR . '/' . plugin_basename( dirname( __FILE__ ) ) . '/' . plugin_basename( dirname( __FILE__ ) ) . '-' . $locale . '.mo' );
 			load_plugin_textdomain( '', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 		}
+
+
+		public function action_links( $links, $file ) {
+
+			// Return normal links if not BuddyPress.
+			if ( BPGCI_ADDON_PLUGIN_BASENAME != $file ) {
+				return $links;
+			}
+
+			// Add a few links to the existing links array.
+			return array_merge(
+				$links,
+				array(
+					'settings' => '<a href="' . esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) ) . '">' . __( 'Settings', 'bp-group-check-in' ) . '</a>',
+				)
+			);
+		}
+
 	}
 
 	/**
-	 * Returns the main instance of BGCI_BB_Platform_Addon to prevent the need to use globals.
+	 * Returns the main instance of BPGCI_Addon to prevent the need to use globals.
 	 *
 	 * @since  1.0.0
-	 * @return BGCI_BB_Platform_Addon
+	 * @return BPGCI_Addon
 	 */
-	function BGCI_BB_Platform_Addon() {
-		return BGCI_BB_Platform_Addon::instance();
+	function BPGCI_Addon() {
+		return BPGCI_Addon::instance();
 	}
 
-	function BGCI_BB_Platform_install_bb_platform_notice() {
+	function BPGCI_BB_Platform_install_bb_platform_notice() {
 		echo '<div class="error fade"><p>';
 		_e('<strong>BuddyBoss Group Check-In</strong></a> requires the BuddyBoss Platform plugin to work. Please <a href="https://buddyboss.com/platform/" target="_blank">install BuddyBoss Platform</a> first.', '');
 		echo '</p></div>';
 	}
 
-	function BGCI_BB_Platform_update_bb_platform_notice() {
+	function BPGCI_BB_Platform_update_bb_platform_notice() {
 		echo '<div class="error fade"><p>';
 		_e('<strong>BuddyBoss Group Check-In</strong></a> requires BuddyBoss Platform plugin version 1.2.6 or higher to work. Please update BuddyBoss Platform.', '');
 		echo '</p></div>';
 	}
 
-	function BGCI_BB_Platform_is_active() {
+	function BPGCI_BB_Platform_is_active() {
 		if ( defined( 'BP_PLATFORM_VERSION' ) && version_compare( BP_PLATFORM_VERSION,'1.2.6', '>=' ) ) {
 			return true;
 		}
 		return false;
 	}
 
-	function BGCI_BB_Platform_init() {
+	function BPGCI_BB_Platform_init() {
 		if ( ! defined( 'BP_PLATFORM_VERSION' ) ) {
-			add_action( 'admin_notices', 'BGCI_BB_Platform_install_bb_platform_notice' );
-			add_action( 'network_admin_notices', 'BGCI_BB_Platform_install_bb_platform_notice' );
+			add_action( 'admin_notices', 'BPGCI_BB_Platform_install_bb_platform_notice' );
+			add_action( 'network_admin_notices', 'BPGCI_BB_Platform_install_bb_platform_notice' );
 			return;
 		}
 
 		if ( version_compare( BP_PLATFORM_VERSION,'1.2.6', '<' ) ) {
-			add_action( 'admin_notices', 'BGCI_BB_Platform_update_bb_platform_notice' );
-			add_action( 'network_admin_notices', 'BGCI_BB_Platform_update_bb_platform_notice' );
+			add_action( 'admin_notices', 'BPGCI_BB_Platform_update_bb_platform_notice' );
+			add_action( 'network_admin_notices', 'BPGCI_BB_Platform_update_bb_platform_notice' );
 			return;
 		}
 
-		BGCI_BB_Platform_Addon();
+		BPGCI_Addon();
 	}
 
-	add_action( 'plugins_loaded', 'BGCI_BB_Platform_init', 9 );
+	add_action( 'plugins_loaded', 'BPGCI_BB_Platform_init', 9 );
 }

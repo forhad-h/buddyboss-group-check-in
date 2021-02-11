@@ -4,14 +4,14 @@ It is required for adding icons to your admin settings.
 */
 
 /* Integration Tab Icon */
-.bp-admin-card.section-BGCI_settings_section h2:before {
-	background-image: url('images/check-double.svg');
+.bp-admin-card.section-BPGCI_settings_section h2:before {
+	background-image: url('../images/check-double.svg');
 	background-size: 18px 18px;
 }
 
 /* Component Settings Icon */
-.bp-admin-card.section-BGCI_addon h2:before {
-	background-image: url('images/check-double.svg');
+.bp-admin-card.section-bb_group_check-in h2:before {
+	background-image: url('../images/check-double.svg');
 	background-size: 18px 18px;
 }
 
