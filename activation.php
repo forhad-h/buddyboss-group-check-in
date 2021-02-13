@@ -10,6 +10,10 @@ if( ! function_exists('BPGCI_activation_events') ) {
 
       global $wpdb;
 
+      // create table
+      require_once( 'admin/create-table.php' );
+      BPGCI_create_table( $wpdb );
+
       // create group check-in view page
       $sql = sprintf("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name='%s'", 'group-check-in');
 
