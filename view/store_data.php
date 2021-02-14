@@ -9,7 +9,7 @@ if( ! function_exists('BPGCI_store_data') ) {
     global $bpgci_success;
     global $bpgci_error;
 
-    $table_name = $table_name = BPGCI_ADDON_PLUGIN['table_name'];
+    $table_name = BPGCI_ADDON_PLUGIN['table_name'];
 
     try {
       $insert = $wpdb->insert( $table_name, [

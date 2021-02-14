@@ -19,3 +19,11 @@ if ( ! function_exists( 'BPGCI_admin_enqueue_script' ) ) {
 
 	add_action( 'admin_enqueue_scripts', 'BPGCI_admin_enqueue_script' );
 }
+
+if( ! function_exists( 'BPGCI_view_enqueue_script' ) ) {
+	function BPGCI_view_enqueue_script() {
+		wp_register_style( 'bgci-view-css', plugin_dir_url( __FILE__ ) . '../css/view-style.css' );
+	}
+
+	add_action( 'wp_enqueue_scripts', 'BPGCI_view_enqueue_script' );
+}

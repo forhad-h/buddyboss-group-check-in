@@ -27,8 +27,9 @@ define_constants( 'BPGCI_ADDON_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define_constants( 'BPGCI_ADDON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define_constants( 'BPGCI_ADDON_PLUGIN', array(
 			'name' => 'buddyboss_group_check_in',
+			'version' => '1.0.0',
 			'table_name' => $wpdb->prefix . 'bp_group_check_in',
-			'version' => '1.0.0'
+			'time_zone' => 'America/Los_Angeles'
 		) );
 
 
