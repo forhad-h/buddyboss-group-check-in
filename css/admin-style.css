@@ -23,3 +23,32 @@ It is required for adding icons to your admin settings.
 #check-in-permalink {
 	margin-right: 20px;
 }
+.bpgci_tiles {
+	display: flex;
+	margin-top: 50px;
+}
+.bpgci_each_tile {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.bpgci_each_tile h2 {
+	margin-top: 0;
+}
+.bpgci_each_tile ul {
+	margin-bottom: 0;
+}
+
+.bpgci_each_tile .total_complete {
+  color: #096e00;
+}
+.bpgci_each_tile .total_pending {
+  color: #00534d;
+}
+.bpgci_each_tile .total_partially_completed {
+  color: #c37031;
+}
+.bpgci_each_tile .total_incomplete {
+  color: #840007;
+}

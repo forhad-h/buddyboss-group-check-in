@@ -6,15 +6,7 @@ date_default_timezone_set( BPGCI_ADDON_PLUGIN['time_zone'] );
 
 require_once( 'store_data.php' );
 
-if( ! function_exists('BPGCI_remote_get') ) {
 
-  function BPGCI_remote_get( $endpoint ) {
-    $request = new WP_Rest_Request( 'GET', $endpoint );
-    $response = rest_do_request( $request )->get_data();
-    return $response;
-  }
-
-}
 
 if( ! function_exists('BPGCI_template') ) {
 
@@ -26,10 +18,11 @@ if( ! function_exists('BPGCI_template') ) {
     $group_id = $_GET ? $_GET['groupid'] ? $_GET['groupid'] : null : null;
     $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
 
-    $group = BPGCI_remote_get( '/buddyboss/v1/groups/1' );
+    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
+    $group = BPGCI_get_group( $group_id );
 
     // get members info
-    $memebers = BPGCI_remote_get( '/buddyboss/v1/groups/1/members' );
+    $memebers = BPGCI_get_members( $group_id );
 
     // get current user info
     $current_user = wp_get_current_user();
@@ -60,11 +53,11 @@ if( ! function_exists('BPGCI_template') ) {
 
     // Get check-in data
     $formatted_date = date("F j, Y, g:i a");
-    require_once( 'count_data.php' );
-    $count_complete = BPGCI_get_data( $wpdb, $group_id, 'complete' );
-    $count_pending = BPGCI_get_data( $wpdb, $group_id, 'pending' );
-    $count_incomplete = BPGCI_get_data( $wpdb, $group_id, 'incomplete' );
-    $count_partially_complete = BPGCI_get_data( $wpdb, $group_id, 'partially_complete' );
+    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
+    $count_complete = BPGCI_count_data( $wpdb, $group_id, 'complete' );
+    $count_pending = BPGCI_count_data( $wpdb, $group_id, 'pending' );
+    $count_incomplete = BPGCI_count_data( $wpdb, $group_id, 'incomplete' );
+    $count_partially_complete = BPGCI_count_data( $wpdb, $group_id, 'partially_complete' );
 
     // enqueue view stylesheet
     wp_enqueue_style( 'bgci-view-css' );
@@ -73,15 +66,15 @@ if( ! function_exists('BPGCI_template') ) {
 ?>
     <?php if ( ! $group_id ): ?>
       <p class="bpgci_notice"><strong>Not found!</strong> Group not exists.</p>
-    <?php endif; ?>
+    <?php return; endif; ?>
 
     <?php if ( ! $group['is_member'] ): ?>
       <p class="bpgci_notice"><strong>Access forbidden!</strong> You are not allowed to see contents.</p>
-    <?php endif; ?>
+    <?php  return; endif; ?>
 
     <?php if ( ! $is_group_check_in_enabled ): ?>
       <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable', 'bp-group-check-in' ); ?></a></p>
-    <?php endif; ?>
+    <?php  return; endif; ?>
 
 
     <div id="group-check-in-wrapper">
