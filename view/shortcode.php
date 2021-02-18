@@ -54,10 +54,10 @@ if( ! function_exists('BPGCI_template') ) {
     // Get check-in data
     $formatted_date = date("F j, Y, g:i a");
     require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
-    $count_complete = BPGCI_count_data( $wpdb, $group_id, 'complete' );
-    $count_pending = BPGCI_count_data( $wpdb, $group_id, 'pending' );
-    $count_incomplete = BPGCI_count_data( $wpdb, $group_id, 'incomplete' );
-    $count_partially_complete = BPGCI_count_data( $wpdb, $group_id, 'partially_complete' );
+    $count_complete = BPGCI_count_data_by_group_and_status( $wpdb, $group_id, 'complete' );
+    $count_pending = BPGCI_count_data_by_group_and_status( $wpdb, $group_id, 'pending' );
+    $count_incomplete = BPGCI_count_data_by_group_and_status( $wpdb, $group_id, 'incomplete' );
+    $count_partially_complete = BPGCI_count_data_by_group_and_status( $wpdb, $group_id, 'partially_complete' );
 
     // enqueue view stylesheet
     wp_enqueue_style( 'bgci-view-css' );

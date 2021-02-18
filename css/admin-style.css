@@ -28,15 +28,28 @@ It is required for adding icons to your admin settings.
 	margin-top: 50px;
 }
 .bpgci_each_tile {
-	background-color: #fff;
+	background-color: #fefefe;
 	padding: 20px;
 	border-radius: 5px;
 	box-shadow: 0 0 10px rgba(0,0,0,0.1);
+	text-decoration: none;
+	transition: 0.3s linear;
+}
+.bpgci_each_tile:hover {
+	background-color: #fff;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+.bpgci_each_tile:focus {
+	outline: none;
+	box-shadow: none;
 }
 .bpgci_each_tile h2 {
 	margin-top: 0;
 }
 .bpgci_each_tile ul {
+	margin-bottom: 0;
+}
+.bpgci_each_tile ul li:last-child {
 	margin-bottom: 0;
 }
 
