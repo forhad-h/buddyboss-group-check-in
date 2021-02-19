@@ -114,7 +114,7 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 		public function requires() {
 			require_once( 'admin/enqueue-scripts.php' );
 			require_once( 'admin/settings.php' );
-			require_once( 'admin/reports/index.php' );
+			require_once( 'admin/report/index.php' );
 			require_once( 'view/shortcode.php' );
 			//require_once( 'admin-option.php' );
 		}

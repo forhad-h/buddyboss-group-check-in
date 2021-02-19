@@ -9,12 +9,15 @@ if( ! function_exists('BPGCI_group_report') ) :
     $group_id = isset($_GET['group_id']) ? $_GET['group_id'] : null;
     $current_date =  date('Y-m-d');
     $group_data_by_date = [];
+    $report_for = $current_date;
 
     require_once( 'get_data.php' );
     $group_data_by_id = BPGCI_get_group_data_by_id( $wpdb, $group_id );
 
     if( isset( $_GET['single_date'] ) ) {
-      $group_data_by_date = BPGCI_get_group_data_by_group_and_date_range( $wpdb, $group_id, $_GET['single_date'] );
+
+      $group_data_by_date = BPGCI_get_group_data_by_group_and_date( $wpdb, $group_id, $_GET['single_date'] );
+
     }elseif( isset( $_GET['from_date'] ) && isset( $_GET['to_date'] ) ) {
 
       $group_data_by_date = BPGCI_get_group_data_by_group_and_date_range( $wpdb, $group_id, $_GET['from_date'], $_GET['to_date'] );
@@ -50,7 +53,7 @@ if( ! function_exists('BPGCI_group_report') ) :
 
 
     }else {
-      $group_data_by_date = BPGCI_get_group_data_by_group_and_date_range( $wpdb, $current_date );
+      $group_data_by_date = BPGCI_get_group_data_by_group_and_date( $wpdb, $group_id, $current_date );
     }
 
     $dates = array_map( function($item) {
@@ -59,62 +62,75 @@ if( ! function_exists('BPGCI_group_report') ) :
 
     $dates = array_unique( $dates );
 
+    usort( $dates, function( $a, $b ) {
+      return strtotime( $a ) - strtotime( $b );
+    });
+
+
+    if(isset( $_GET['single_date'] )) {
+      $report_for = $_GET['single_date'];
+    }elseif( isset( $_GET['from_date'] ) && isset( $_GET['to_date'] ) ) {
+      $report_for = "<span>From:</span> {$_GET['from_date']} <span>to</span> {$_GET['to_date']}";
+    }
 
 ?>
 <div class="bpgci_single_group_report">
 
-  <form class="single_date_form" method="get" action="<?= $_SERVER['REQUEST_URI']; ?>" >
-    <input type="hidden" name="page" value="<?= $_GET['page']; ?>" />
-    <input type="hidden" name="group_id" value="<?= $_GET['group_id']; ?>" />
-    <select name="single_date">
-      <option>Select Date</option>
-
-      <?php foreach($dates as $date): ?>
-        <option
-          value="<?= $date; ?>"
-          <?= isset($_GET['single_date']) && ($date ==  $_GET['single_date']) ? 'selected' : ''; ?> >
-            <?= $date; ?></option>
-      <?php endforeach;?>
-
-    </select>
-    <input type="submit" value="view" />
-  </form>
-
-  <form class="multiple_dates_form" method="get" >
-    <input type="hidden" name="page" value="<?= $_GET['page']; ?>" />
-    <input type="hidden" name="group_id" value="<?= $_GET['group_id']; ?>" />
-    <label> From
-      <select name="from_date">
+  <div class="query_forms">
+    <form class="single_date_form" method="get" action="<?= $_SERVER['REQUEST_URI']; ?>" >
+      <input type="hidden" name="page" value="<?= $_GET['page']; ?>" />
+      <input type="hidden" name="group_id" value="<?= $_GET['group_id']; ?>" />
+      <select name="single_date">
         <option>Select Date</option>
 
         <?php foreach($dates as $date): ?>
           <option
-          value="<?= $date; ?>"
-          <?= isset($_GET['from_date']) && ($date ==  $_GET['from_date']) ? 'selected' : ''; ?>>
-            <?= $date; ?></option>
+            value="<?= $date; ?>"
+            <?= isset($_GET['single_date']) && ($date ==  $_GET['single_date']) ? 'selected' : ''; ?> >
+              <?= $date; ?></option>
         <?php endforeach;?>
 
       </select>
-    </label>
+      <input type="submit" class="button button-small" value="Get Report" />
+    </form>
+    <span class="query_form_separator">or</span>
+    <form class="multiple_dates_form" method="get" >
+      <input type="hidden" name="page" value="<?= $_GET['page']; ?>" />
+      <input type="hidden" name="group_id" value="<?= $_GET['group_id']; ?>" />
+      <label> From
+        <select name="from_date">
+          <option>Select Date</option>
 
-    <label> To
-      <select name="to_date">
-        <option>Select Date</option>
+          <?php foreach($dates as $date): ?>
+            <option
+            value="<?= $date; ?>"
+            <?= isset($_GET['from_date']) && ($date ==  $_GET['from_date']) ? 'selected' : ''; ?>>
+              <?= $date; ?></option>
+          <?php endforeach;?>
 
-        <?php foreach($dates as $date): ?>
-          <option
-          value="<?= $date; ?>"
-          <?= isset($_GET['to_date']) && ($date ==  $_GET['to_date']) ? 'selected' : ''; ?>>
-            <?= $date; ?></option>
-        <?php endforeach;?>
+        </select>
+      </label>
 
-      </select>
-    </label>
+      <label> To
+        <select name="to_date">
+          <option>Select Date</option>
 
-    <input type="submit" value="view" />
-  </form>
+          <?php foreach($dates as $date): ?>
+            <option
+            value="<?= $date; ?>"
+            <?= isset($_GET['to_date']) && ($date ==  $_GET['to_date']) ? 'selected' : ''; ?>>
+              <?= $date; ?></option>
+          <?php endforeach;?>
 
-  <table class="wp-list-table widefat fixed striped table-view-list" >
+        </select>
+      </label>
+
+      <input type="submit" class="button button-small" value="Get Report" />
+    </form>
+  </div>
+
+  <h2>Report - <?= $report_for; ?></h2>
+  <table class="wp-list-table widefat fixed striped table-view-list bpgci_data_table" >
     <thead>
       <tr>
         <th>Username</th>
@@ -134,10 +150,10 @@ if( ! function_exists('BPGCI_group_report') ) :
           ?>
             <tr>
               <td><?= $data['user_name']; ?></td>
-              <td><?= $data['complete']; ?></td>
-              <td><?= $data['pending']; ?></td>
-              <td><?= $data['partially_complete']; ?></td>
-              <td><?= $data['incomplete']; ?></td>
+              <td><?= $data['complete'] ? "<strong>{$data['complete']}</strong>" : '-'; ?></td>
+              <td><?= $data['pending'] ? "<strong>{$data['pending']}</strong>" : '-'; ?></td>
+              <td><?= $data['partially_complete'] ? "<strong>{$data['partially_complete']}</strong>" : '-'; ?></td>
+              <td><?= $data['incomplete'] ? "<strong>{$data['incomplete']}</strong>" : '-'; ?></td>
             </tr>
         <?php endforeach; ?>
 
@@ -149,10 +165,10 @@ if( ! function_exists('BPGCI_group_report') ) :
           ?>
             <tr>
               <td><?= $user->user_login; ?></td>
-              <td><?= $data->status == 'complete' ? 1 : '-'; ?></td>
-              <td><?= $data->status == 'pending' ? 1 : '-'; ?></td>
-              <td><?= $data->status == 'partially_complete' ? 1 : '-'; ?></td>
-              <td><?= $data->status == 'incomplete' ? 1 : '-'; ?></td>
+              <td><?= $data->status == 'complete' ? "<strong>1</strong>" : '-'; ?></td>
+              <td><?= $data->status == 'pending' ? "<strong>1</strong>" : '-'; ?></td>
+              <td><?= $data->status == 'partially_complete' ? "<strong>1</strong>" : '-'; ?></td>
+              <td><?= $data->status == 'incomplete' ? "<strong>1</strong>" : '-'; ?></td>
             </tr>
         <?php endforeach; ?>
 

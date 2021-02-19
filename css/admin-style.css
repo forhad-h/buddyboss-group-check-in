@@ -23,6 +23,18 @@ It is required for adding icons to your admin settings.
 #check-in-permalink {
 	margin-right: 20px;
 }
+
+/* Report page styles */
+.bpgci_report_wrapper {
+	width: 800px;
+	max-width: 100%;
+	margin: auto;
+}
+.bpgci_report_wrapper h1 {
+	text-align: center;
+	font-size: 2rem;
+	margin-top: 25px;
+}
 .bpgci_tiles {
 	display: flex;
 	margin-top: 50px;
@@ -64,4 +76,43 @@ It is required for adding icons to your admin settings.
 }
 .bpgci_each_tile .total_incomplete {
   color: #840007;
+}
+.bpgci_data_table thead tr th,
+.bpgci_data_table tfoot tr th {
+	font-weight: 500;
+}
+.bpgci_single_group_report {
+	padding-right: 20px;
+}
+.bpgci_single_group_report h2 {
+	margin-top: 25px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+.bpgci_single_group_report h2 span {
+	font-weight: 300;
+}
+.bpgci_single_group_report .query_forms {
+	text-align: center;
+}
+.bpgci_single_group_report .query_forms .query_form_separator {
+  margin-left: 15px;
+	margin-right: 15px;
+	font-weight: 500;
+}
+.bpgci_single_group_report .single_date_form,
+.bpgci_single_group_report .multiple_dates_form {
+  display: inline-block;
+}
+.bpgci_single_group_report .single_date_form [type=submit],
+.bpgci_single_group_report .multiple_dates_form [type=submit] {
+	margin-top: 2px;
+}
+.bpgci_single_group_report .single_date_form {
+	margin-top: 35px;
+}
+.bpgci_single_group_report .multiple_dates_form {
+	margin-top: 15px;
+}
+.bpgci_data_table {
 }
