@@ -2,6 +2,7 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+//TODO: Implement a button to clear report
 
 if( ! function_exists('BPGCI_group_report') ) :
   function BPGCI_group_report( $wpdb ) {

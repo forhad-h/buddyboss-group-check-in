@@ -3,7 +3,7 @@
 
     if( BPGCI_args.isCheckinEnabled != 0 ) {
       var checkinPermalink = '';
-      var checkURL = BPGCI_args.siteURL + '/group-check-in?groupid=' + BPGCI_args.groupID;
+      var checkURL = BPGCI_args.siteURL + '/group-check-in?group_id=' + BPGCI_args.group_id;
 
       checkinPermalink += '<div id="check-in-permalink-box">';
       checkinPermalink += '<strong>Check-in link: </strong>';

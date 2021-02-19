@@ -36,8 +36,15 @@ It is required for adding icons to your admin settings.
 	margin-top: 25px;
 }
 .bpgci_tiles {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
 	display: flex;
 	margin-top: 50px;
+	-webkit-flex-wrap: wrap;
+	-moz-flex-wrap: wrap;
+	flex-wrap: wrap;
 }
 .bpgci_each_tile {
 	background-color: #fefefe;
@@ -46,6 +53,8 @@ It is required for adding icons to your admin settings.
 	box-shadow: 0 0 10px rgba(0,0,0,0.1);
 	text-decoration: none;
 	transition: 0.3s linear;
+	margin: 10px;
+	width: 206px;
 }
 .bpgci_each_tile:hover {
 	background-color: #fff;
@@ -114,5 +123,10 @@ It is required for adding icons to your admin settings.
 .bpgci_single_group_report .multiple_dates_form {
 	margin-top: 15px;
 }
-.bpgci_data_table {
+
+/* Responsive */
+@media (max-width: 800px) {
+	.bpgci_each_tile {
+		width: 100%;
+	}
 }

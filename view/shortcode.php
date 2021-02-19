@@ -15,7 +15,7 @@ if( ! function_exists('BPGCI_template') ) {
     global $wpdb;
 
     // get group info
-    $group_id = $_GET ? $_GET['groupid'] ? $_GET['groupid'] : null : null;
+    $group_id = $_GET ? $_GET['group_id'] ? $_GET['group_id'] : null : null;
     $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
 
     require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
@@ -35,7 +35,7 @@ if( ! function_exists('BPGCI_template') ) {
 
     // Is submitted
     require_once( 'is_submitted.php' );
-    $is_submitted = BPGCI_is_submitted($wpdb, $user_id, $current_date);
+    $is_submitted = BPGCI_is_submitted($wpdb, $group_id, $user_id, $current_date);
 
     if( $_SERVER['REQUEST_METHOD'] == 'POST' && !$is_submitted ) {
 
