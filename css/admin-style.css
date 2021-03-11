@@ -16,11 +16,13 @@ It is required for adding icons to your admin settings.
 }
 
 /* Group admin page */
-#check-in-permalink-box {
+#check-in-permalink-box,
+#group-type-permalink-box {
 	line-height: 25px;
   margin-top: 15px;
 }
-#check-in-permalink {
+#check-in-permalink,
+#group-permalink {
 	margin-right: 20px;
 }
 

@@ -32,6 +32,7 @@ define_constants( 'BPGCI_ADDON_PLUGIN', array(
 			'time_zone' => 'America/Los_Angeles'
 		) );
 
+date_default_timezone_set( BPGCI_ADDON_PLUGIN['time_zone'] );
 
 /**
  * Define constant if not already set
@@ -45,6 +46,7 @@ function define_constants( $name, $value ) {
 }
 
 include_once( 'activation.php' );
+
 
 if ( ! class_exists( 'BPGCI_Addon' ) ) {
 
@@ -116,6 +118,8 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			require_once( 'admin/settings.php' );
 			require_once( 'admin/report/index.php' );
 			require_once( 'view/shortcode.php' );
+			require_once( 'view/single_group.php' );
+			require_once( 'view/single_member.php' );
 			//require_once( 'admin-option.php' );
 		}
 
@@ -214,4 +218,5 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 	}
 
 	add_action( 'plugins_loaded', 'BPGCI_BB_Platform_init', 9 );
+
 }

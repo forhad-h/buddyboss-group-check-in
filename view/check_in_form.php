@@ -6,14 +6,13 @@ require_once( 'store_data.php' );
 
 
 
-if( ! function_exists('BPGCI_template') ) {
+if( ! function_exists('BPGCI_check_in_form') ) {
 
-  function BPGCI_template() {
+  function BPGCI_check_in_form( $group_id ) {
 
     global $wpdb;
 
     // get group info
-    $group_id = $_GET ? $_GET['group_id'] ? $_GET['group_id'] : null : null;
     $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
 
     require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
@@ -50,46 +49,30 @@ if( ! function_exists('BPGCI_template') ) {
     }
 
     // Get check-in data
-    $formatted_date = date("F j, Y, g:i a");
-
-    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
-    $count_complete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'complete', $current_date );
-    $count_pending = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'pending', $current_date );
-    $count_incomplete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'incomplete', $current_date );
-    $count_partially_complete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'partially_complete', $current_date );
+    $formatted_date = date("F j, Y");
 
     // enqueue view stylesheet
-    wp_enqueue_style( 'bgci-view-css' );
+    wp_enqueue_style( 'bgci-check-in-form-css' );
 
     ob_start();
 ?>
     <?php if ( ! $group_id ): ?>
       <p class="bpgci_notice"><strong>Not found!</strong> Group not exists.</p>
-    <?php return; endif; ?>
+    <?php return ob_get_clean(); endif; ?>
 
     <?php if ( ! $group['is_member'] ): ?>
       <p class="bpgci_notice"><strong>Access forbidden!</strong> You are not allowed to see contents.</p>
-    <?php  return; endif; ?>
+    <?php  return ob_get_clean(); endif; ?>
 
     <?php if ( ! $is_group_check_in_enabled ): ?>
       <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable', 'bp-group-check-in' ); ?></a></p>
-    <?php  return; endif; ?>
+    <?php  return ob_get_clean(); endif; ?>
 
 
-    <div id="group-check-in-wrapper">
-      <div class="bpgci_group_info">
-        <h2><?= $group['name']; ?></h2>
-        <p><?= $group['description']['rendered']; ?></p>
-      </div>
-
-      <div class="bpcgi_divider"></div>
+    <div class="group_check_in_form_wrapper">
 
       <div class="bpgci_today">
-        <p><?= $formatted_date; ?></p>
-      </div>
-
-      <div class="bpgci_total_result">
-        <p><span class="result_complete"><?= $count_complete; ?> Complete</span>, <span class="result_pending"><?= $count_pending; ?> Pending</span>, <span class="result_partially_completed"><?= $count_partially_complete; ?> Partially Completed</span>, <span class="result_incomplete"><?= $count_incomplete; ?> Incomplete</span></p>
+        <p>Today - <?= $formatted_date; ?></p>
       </div>
 
       <div class="bpcgi_divider"></div>
@@ -129,7 +112,5 @@ if( ! function_exists('BPGCI_template') ) {
     return ob_get_clean();
 
   }
-
-  add_shortcode( 'bpgci_template', 'BPGCI_template' );
 
 }

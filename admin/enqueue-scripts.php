@@ -23,6 +23,8 @@ if ( ! function_exists( 'BPGCI_admin_enqueue_script' ) ) {
 if( ! function_exists( 'BPGCI_view_enqueue_script' ) ) {
 	function BPGCI_view_enqueue_script() {
 		wp_register_style( 'bgci-view-css', plugin_dir_url( __FILE__ ) . '../css/view-style.css' );
+		wp_register_style( 'bgci-check-in-form-css', plugin_dir_url( __FILE__ ) . '../css/check-in-form-style.css' );
+		wp_register_style( 'bgci-check-in-status-css', plugin_dir_url( __FILE__ ) . '../css/check-in-status-style.css' );
 	}
 
 	add_action( 'wp_enqueue_scripts', 'BPGCI_view_enqueue_script' );
