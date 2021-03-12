@@ -23,10 +23,10 @@ if( ! function_exists('BPGCI_check_in_status') ) {
 
     // Get check-in data
     require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
-    $count_complete = BPGCI_count_data_by_user_group_status_and_date( $wpdb, $member_id, $group_id, 'complete', $current_date );
-    $count_pending = BPGCI_count_data_by_user_group_status_and_date( $wpdb, $member_id, $group_id, 'pending', $current_date );
-    $count_incomplete = BPGCI_count_data_by_user_group_status_and_date( $wpdb, $member_id, $group_id, 'incomplete', $current_date );
-    $count_partially_complete = BPGCI_count_data_by_user_group_status_and_date( $wpdb, $member_id, $group_id, 'partially_complete', $current_date );
+    $count_complete = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'complete', $current_date );
+    $count_pending = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'pending', $current_date );
+    $count_incomplete = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'incomplete', $current_date );
+    $count_partially_complete = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'partially_complete', $current_date );
 
     // enqueue view stylesheet
     wp_enqueue_style( 'bgci-check-in-status-css' );
@@ -52,10 +52,6 @@ if( ! function_exists('BPGCI_check_in_status') ) {
       </div>
 
       <div class="bpcgi_divider"></div>
-
-      <div class="bpgci_today">
-        <p>Today - <?= $formatted_date; ?></p>
-      </div>
 
       <div class="bpgci_total_result">
         <p><span class="result_complete"><?= $count_complete; ?> Complete</span>, <span class="result_pending"><?= $count_pending; ?> Pending</span>, <span class="result_partially_completed"><?= $count_partially_complete; ?> Partially Completed</span>, <span class="result_incomplete"><?= $count_incomplete; ?> Incomplete</span></p>

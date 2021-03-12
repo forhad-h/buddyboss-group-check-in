@@ -38,7 +38,7 @@ if( ! function_exists( 'BPGCI_member_check_in_subnav_screen' ) ) {
 
 if( ! function_exists( 'BPGCI_member_check_in_subnav_screen_title' ) ) {
   function BPGCI_member_check_in_subnav_screen_title() {
-  	echo sprintf( '<h3>%s</h3>', __( 'Check-in Status', 'bp-group-check-in' ) );
+  	echo sprintf( '<h4>%s</h4>', __( 'Check-in Status', 'bp-group-check-in' ) );
   }
 }
 
