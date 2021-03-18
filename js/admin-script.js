@@ -1,6 +1,15 @@
 !(function($) {
   $(document).ready(function() {
 
+    $('#bpgci-delete').on( 'click', function(e) {
+      e.preventDefault();
+      var isConfirm = confirm("Are you sure to delete this group?")
+      if(isConfirm) {
+        $(location).attr('href', $(this).attr('href'))
+      }
+    } )
+
+
     if( BPGCI_args.isCheckinEnabled != 0 ) {
       var checkinPermalink = '';
       var checkURL = BPGCI_args.siteURL + '/group-check-in?group_id=' + BPGCI_args.group_id;

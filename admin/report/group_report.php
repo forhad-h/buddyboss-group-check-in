@@ -77,7 +77,7 @@ if( ! function_exists('BPGCI_group_report') ) :
 ?>
 <div class="bpgci_single_group_report">
 
-  <div class="query_forms">
+  <div class="query_forms tablenav top">
     <form class="single_date_form" method="get" action="<?= $_SERVER['REQUEST_URI']; ?>" >
       <input type="hidden" name="page" value="<?= $_GET['page']; ?>" />
       <input type="hidden" name="group_id" value="<?= $_GET['group_id']; ?>" />

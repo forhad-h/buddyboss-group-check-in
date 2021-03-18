@@ -28,14 +28,10 @@ It is required for adding icons to your admin settings.
 
 /* Report page styles */
 .bpgci_report_wrapper {
-	width: 800px;
-	max-width: 100%;
-	margin: auto;
+
 }
 .bpgci_report_wrapper h1 {
-	text-align: center;
-	font-size: 2rem;
-	margin-top: 25px;
+
 }
 .bpgci_tiles {
 	display: -webkit-box;
@@ -43,7 +39,6 @@ It is required for adding icons to your admin settings.
 	display: -moz-box;
 	display: -ms-flexbox;
 	display: flex;
-	margin-top: 50px;
 	-webkit-flex-wrap: wrap;
 	-moz-flex-wrap: wrap;
 	flex-wrap: wrap;
@@ -65,6 +60,9 @@ It is required for adding icons to your admin settings.
 .bpgci_each_tile:focus {
 	outline: none;
 	box-shadow: none;
+}
+.bpgci_each_tile:first-child {
+	margin-left: 0;
 }
 .bpgci_each_tile h2 {
 	margin-top: 0;
@@ -95,17 +93,6 @@ It is required for adding icons to your admin settings.
 .bpgci_single_group_report {
 	padding-right: 20px;
 }
-.bpgci_single_group_report h2 {
-	margin-top: 25px;
-	margin-bottom: 10px;
-	text-align: center;
-}
-.bpgci_single_group_report h2 span {
-	font-weight: 300;
-}
-.bpgci_single_group_report .query_forms {
-	text-align: center;
-}
 .bpgci_single_group_report .query_forms .query_form_separator {
   margin-left: 15px;
 	margin-right: 15px;
@@ -119,11 +106,9 @@ It is required for adding icons to your admin settings.
 .bpgci_single_group_report .multiple_dates_form [type=submit] {
 	margin-top: 2px;
 }
-.bpgci_single_group_report .single_date_form {
-	margin-top: 35px;
-}
-.bpgci_single_group_report .multiple_dates_form {
-	margin-top: 15px;
+
+.groups #pending {
+	font-size: 14px;
 }
 
 /* Responsive */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: BuddyBoss Group Check-in
+ * Plugin Name: BuddyUp
  * Description: Custom addon of BuddyBoss with group check-in functionality
  * Version:     1.0.0
  * Text Domain: bp-group-check-in
@@ -117,6 +117,7 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			require_once( 'admin/enqueue-scripts.php' );
 			require_once( 'admin/settings.php' );
 			require_once( 'admin/report/index.php' );
+
 			require_once( 'view/shortcode.php' );
 			require_once( 'view/single_group.php' );
 			require_once( 'view/single_member.php' );
