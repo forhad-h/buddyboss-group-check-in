@@ -4,8 +4,8 @@ defined( 'ABSPATH' ) || exit;
 
 //TODO: Implement a button to clear report
 
-if( ! function_exists('BPGCI_group_report') ) :
-  function BPGCI_group_report( $wpdb ) {
+if( ! function_exists('BPGCI_single_group_report') ) {
+  function BPGCI_single_group_report( $wpdb ) {
 
     $group_id = isset($_GET['group_id']) ? $_GET['group_id'] : null;
     $current_date =  date('Y-m-d');
@@ -190,4 +190,71 @@ if( ! function_exists('BPGCI_group_report') ) :
   </table>
 </div>
 
-<?php } endif; ?>
+<?php
+  $list_data = array();
+
+
+  require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
+  $group = BPGCI_get_group($group_id);
+  $group_name = $group['name'];
+
+  if( isset($user_data_by_date_range) ) {
+    foreach( $user_data_by_date_range as $data ) {
+
+
+      $each_row = array(
+        'ID' => $group_id,
+        'group_name' => $group_name,
+        'complete' => $count_complete,
+        'pending' => $count_pending,
+        'incomplete' => $count_incomplete,
+        'partially_complete' => $count_partially_complete,
+      );
+
+
+    }
+  }else {
+    foreach( $group_data_by_date as $data ) {
+      $user = get_user_by('id', $data->user_id);
+
+      $user_name = $user->user_login;
+      $count_complete = $data->status == 'complete' ? "<strong>1</strong>" : '-';
+      $count_pending = $data->status == 'pending' ? "<strong>1</strong>" : '-';
+      $count_incomplete = $data->status == 'partially_complete' ? "<strong>1</strong>" : '-';
+      $count_partially_complete = $data->status == 'incomplete' ? "<strong>1</strong>" : '-';
+
+      $each_row = array(
+        'ID' => $data->id,
+        'user_name' => $user_name,
+        'complete' => $count_complete,
+        'pending' => $count_pending,
+        'incomplete' => $count_incomplete,
+        'partially_complete' => $count_partially_complete,
+      );
+
+      array_push( $list_data, $each_row );
+
+    }
+  }
+?>
+
+<div class="wrap">
+  <h1 class="wp-heading-inline"><?= __( "BuddyUp Report of - {$group_name}", 'bp-group-check-in' ); ?></h1>
+
+  <form method="post">
+    <input type="hidden" name="page" value="groups_list_table">
+
+<?php
+  // require- BPGCI_List_Table
+  require_once( __DIR__ . '/../list_table.php' );
+  $BPGCI_groups_data_table = new BPGCI_List_Table( PAGE_TYPE_SINGLE_GROUP, $list_data );
+  $BPGCI_groups_data_table->prepare_items();
+  $BPGCI_groups_data_table->display();
+?>
+
+  </form>
+</div>
+
+<?php
+  }
+}

@@ -2,11 +2,8 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-// access to class - BPGCI_List_Table
-require_once( __DIR__ . '/../list_table.php' );
-
-if( ! function_exists( 'BPGCI_groups_list_table' ) ) {
-  function BPGCI_groups_list_table($wpdb, $group_ids) {
+if( ! function_exists( 'BPGCI_all_groups_report' ) ) {
+  function BPGCI_all_groups_report($wpdb, $group_ids) {
 
   ?>
 
@@ -69,13 +66,15 @@ if( ! function_exists( 'BPGCI_groups_list_table' ) ) {
 
   ?>
     <div class="wrap">
-      <h1 class="wp-heading-inline"><?= __( 'BuddyUp Report', 'bp-group-check-in' ); ?></h1>
+      <h1 class="wp-heading-inline"><?= __( 'BuddyUp All Groups Report', 'bp-group-check-in' ); ?></h1>
 
       <form method="post">
         <input type="hidden" name="page" value="groups_list_table">
 
         <?php
-          $BPGCI_groups_data_table = new BPGCI_List_Table( 'groups', $list_data );
+          // require- BPGCI_List_Table
+          require_once( __DIR__ . '/../list_table.php' );
+          $BPGCI_groups_data_table = new BPGCI_List_Table( PAGE_TYPE_ALL_GROUPS, $list_data );
           $BPGCI_groups_data_table->prepare_items();
           $BPGCI_groups_data_table->display();
         ?>

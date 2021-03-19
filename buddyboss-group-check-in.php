@@ -31,6 +31,8 @@ define_constants( 'BPGCI_ADDON_PLUGIN', array(
 			'table_name' => $wpdb->prefix . 'bp_group_check_in',
 			'time_zone' => 'America/Los_Angeles'
 		) );
+define_constants( 'PAGE_TYPE_SINGLE_GROUP', 'single_group' );
+define_constants( 'PAGE_TYPE_ALL_GROUPS', 'all_groups' );
 
 date_default_timezone_set( BPGCI_ADDON_PLUGIN['time_zone'] );
 

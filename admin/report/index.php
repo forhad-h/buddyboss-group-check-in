@@ -24,12 +24,12 @@ if( ! function_exists('BPGCI_group_check_in_report_page_content') ) {
     <div class="bpgci_report_wrapper wrap">
       <h1 class="wp-heading-inline"><?= __( 'BuddyUp Report', 'bp-group-check-in' ); ?></h1>
       <?php
-      if(isset($_GET['group_id'])) {
-        require_once( 'group_report.php' );
-        BPGCI_group_report($wpdb);
+      if( isset($_GET['page_type']) && $_GET['page_type'] === PAGE_TYPE_SINGLE_GROUP ) {
+        require_once( 'single_group_report.php' );
+        BPGCI_single_group_report( $wpdb );
       }else {
-        require_once( 'groups_list_table.php' );
-        BPGCI_groups_list_table($wpdb, $group_ids);
+        require_once( 'all_groups_report.php' );
+        BPGCI_all_groups_report( $wpdb, $group_ids );
       }
       ?>
     </div>

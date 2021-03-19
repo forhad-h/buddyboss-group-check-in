@@ -9,13 +9,13 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 
 class BPGCI_List_Table extends WP_List_Table {
 
-  private $list_type;
+  private $page_type;
   private $list_data;
 
-  function __construct( $list_type, $list_data ){
+  function __construct( $page_type, $list_data ){
     global $status, $page;
 
-    $this->list_type = $list_type;
+    $this->page_type = $page_type;
     $this->list_data = $list_data;
 
     parent::__construct( array(
@@ -40,31 +40,60 @@ class BPGCI_List_Table extends WP_List_Table {
   }
 
   function get_sortable_columns() {
-    $sortable_columns = array(
-      'group_name'  => array('group_name',false),
+    $first_column = [];
+    if( $this->page_type === PAGE_TYPE_ALL_GROUPS ) {
+      $first_column = array(
+        'group_name'  => array('group_name',false),
+      );
+    }else if( $this->page_type === PAGE_TYPE_SINGLE_GROUP ) {
+      $first_column = array(
+        'user_name'  => array('user_name',false),
+      );
+    }
+
+    $other_columns = array(
       'complete' => array('complete',false),
       'pending'   => array('pending',false),
       'partially_complete'   => array('partially_complete',false),
       'incomplete'   => array('incomplete',false),
     );
+
+    $sortable_columns = array_merge( $first_column, $other_columns );
     return $sortable_columns;
   }
 
   function get_columns(){
-    $columns = array(
+    $first_columns = [];
+
+    if( $this->page_type === PAGE_TYPE_ALL_GROUPS ) {
+      $first_columns = array(
         'cb'        => '<input type="checkbox" />',
         'group_name' => __( 'Group Title', 'bp-group-check-in' ),
+      );
+    }else if( $this->page_type === PAGE_TYPE_SINGLE_GROUP ) {
+      $first_columns = array(
+        'cb'        => '<input type="checkbox" />',
+        'user_name' => __( 'Username', 'bp-group-check-in' ),
+      );
+    }
+
+    $other_columns = array(
         'complete'    => __( 'Complete', 'bp-group-check-in' ),
         'pending'      => __( 'Pending', 'bp-group-check-in' ),
         'partially_complete'      => __( 'Partially Completed', 'bp-group-check-in' ),
         'incomplete'      => __( 'Incomplete', 'bp-group-check-in' ),
     );
+
+    $columns = array_merge( $first_columns, $other_columns );
+
     return $columns;
+
   }
 
   function usort_reorder( $a, $b ) {
+
     // If no sort, default to title
-    $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'group_name';
+    $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : $this->order_by();
     // If no order, default to asc
     $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
     // Determine sort order
@@ -73,9 +102,21 @@ class BPGCI_List_Table extends WP_List_Table {
     return ( $order === 'asc' ) ? $result : -$result;
   }
 
+  function order_by() {
+    $order_by = [];
+
+    if( $this->page_type === PAGE_TYPE_ALL_GROUPS ) {
+      $order_by = 'group_name';
+    }else if( $this->page_type === PAGE_TYPE_SINGLE_GROUP ) {
+      $order_by = 'user_name';
+    }
+
+    return $order_by;
+  }
+
   function column_group_name($item){
     $actions = array(
-        'view'    => sprintf('<a href="?page=%s&action=%s&group_id=%s">View</a>',$_REQUEST['page'],'view',$item['ID']),
+        'view'    => sprintf('<a href="?page=%s&action=%s&page_type=%s&group_id=%s">View</a>',$_REQUEST['page'],'view', PAGE_TYPE_SINGLE_GROUP, $item['ID'] ),
         'delete'  => sprintf('<a id="bpgci-delete" href="?page=%s&action=%s&group_id=%s&_wpnonce=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['ID'], wp_create_nonce( 'bpgci_delete_group' ) ),
     );
 
