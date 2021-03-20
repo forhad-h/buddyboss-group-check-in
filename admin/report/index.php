@@ -20,41 +20,38 @@ if( ! function_exists('BPGCI_group_check_in_report_page_content') ) {
 
     $group_ids = array_unique($group_ids);
 
-    ?>
-    <div class="bpgci_report_wrapper wrap">
-      <h1 class="wp-heading-inline"><?= __( 'BuddyUp Report', 'bp-group-check-in' ); ?></h1>
-      <?php
-      if( isset($_GET['page_type']) && $_GET['page_type'] === PAGE_TYPE_SINGLE_GROUP ) {
-        require_once( 'single_group_report.php' );
-        BPGCI_single_group_report( $wpdb );
-      }else {
-        require_once( 'all_groups_report.php' );
-        BPGCI_all_groups_report( $wpdb, $group_ids );
-      }
-      ?>
-    </div>
+    if( isset($_GET['page_type']) && $_GET['page_type'] === BPGCI_PAGE_TYPE_SINGLE_GROUP ) {
+      require_once( 'single_group_report.php' );
+      BPGCI_single_group_report( $wpdb );
+    }else {
+      require_once( 'all_groups_report.php' );
+      BPGCI_all_groups_report( $wpdb, $group_ids );
+    }
 
-    <?php
   }
 }
 
-if( ! function_exists('BPGCI_create_menu_page') ) {
+if( ! function_exists('BPGCI_create_submenu_page') ) {
 
-  function BPGCI_create_menu_page() {
+  function BPGCI_create_submenu_page() {
 
-    $hook = add_menu_page(
-      __( 'BuddyUp', 'bp-group-check-in' ),
-      __( 'BuddyUp', 'bp-group-check-in' ),
+    $hook = add_submenu_page(
+      BPGCI_MENU_SLUG,
+      __( 'BuddyUp Report', 'bp-group-check-in' ),
+      __( 'Report', 'bp-group-check-in' ),
       'publish_pages',
-      'group-check-in-report',
-      'BPGCI_group_check_in_report_page_content'
+      'buddy-up-report',
+      'BPGCI_group_check_in_report_page_content',
+      3
     );
+
+    remove_submenu_page( BPGCI_MENU_SLUG, BPGCI_MENU_SLUG );
 
     add_action( "load-$hook", 'BPGCI_add_options' );
 
   }
 
-  add_action( 'admin_menu', 'BPGCI_create_menu_page', 10 );
+  add_action( 'admin_menu', 'BPGCI_create_submenu_page', 10 );
 
 }
 

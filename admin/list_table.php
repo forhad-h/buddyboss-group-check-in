@@ -41,11 +41,11 @@ class BPGCI_List_Table extends WP_List_Table {
 
   function get_sortable_columns() {
     $first_column = [];
-    if( $this->page_type === PAGE_TYPE_ALL_GROUPS ) {
+    if( $this->page_type === BPGCI_PAGE_TYPE_ALL_GROUPS ) {
       $first_column = array(
         'group_name'  => array('group_name',false),
       );
-    }else if( $this->page_type === PAGE_TYPE_SINGLE_GROUP ) {
+    }else if( $this->page_type === BPGCI_PAGE_TYPE_SINGLE_GROUP ) {
       $first_column = array(
         'user_name'  => array('user_name',false),
       );
@@ -65,12 +65,12 @@ class BPGCI_List_Table extends WP_List_Table {
   function get_columns(){
     $first_columns = [];
 
-    if( $this->page_type === PAGE_TYPE_ALL_GROUPS ) {
+    if( $this->page_type === BPGCI_PAGE_TYPE_ALL_GROUPS ) {
       $first_columns = array(
         'cb'        => '<input type="checkbox" />',
         'group_name' => __( 'Group Title', 'bp-group-check-in' ),
       );
-    }else if( $this->page_type === PAGE_TYPE_SINGLE_GROUP ) {
+    }else if( $this->page_type === BPGCI_PAGE_TYPE_SINGLE_GROUP ) {
       $first_columns = array(
         'cb'        => '<input type="checkbox" />',
         'user_name' => __( 'Username', 'bp-group-check-in' ),
@@ -105,9 +105,9 @@ class BPGCI_List_Table extends WP_List_Table {
   function order_by() {
     $order_by = [];
 
-    if( $this->page_type === PAGE_TYPE_ALL_GROUPS ) {
+    if( $this->page_type === BPGCI_PAGE_TYPE_ALL_GROUPS ) {
       $order_by = 'group_name';
-    }else if( $this->page_type === PAGE_TYPE_SINGLE_GROUP ) {
+    }else if( $this->page_type === BPGCI_PAGE_TYPE_SINGLE_GROUP ) {
       $order_by = 'user_name';
     }
 
@@ -116,23 +116,26 @@ class BPGCI_List_Table extends WP_List_Table {
 
   function column_group_name($item){
     $actions = array(
-        'view'    => sprintf('<a href="?page=%s&action=%s&page_type=%s&group_id=%s">View</a>',$_REQUEST['page'],'view', PAGE_TYPE_SINGLE_GROUP, $item['ID'] ),
-        'delete'  => sprintf('<a id="bpgci-delete" href="?page=%s&action=%s&group_id=%s&_wpnonce=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['ID'], wp_create_nonce( 'bpgci_delete_group' ) ),
+        'view'    => sprintf('<a href="?page=%s&action=%s&page_type=%s&group_id=%s">View</a>',$_REQUEST['page'],'view', BPGCI_PAGE_TYPE_SINGLE_GROUP, $item['ID'] ),
+        'delete'  => sprintf('<a class="bpgci_reset" href="?page=%s&action=%s&group_id=%s&_wpnonce=%s">Reset</a>', $_REQUEST['page'], 'delete', $item['ID'], wp_create_nonce( 'bpgci_reset_group' ) ),
     );
 
     return sprintf('%1$s %2$s', $item['group_name'], $this->row_actions($actions) );
   }
 
   function get_bulk_actions() {
-    $actions = array(
-      'delete'    => 'Delete'
-    );
+    $actions = array();
+    if( $this->page_type === BPGCI_PAGE_TYPE_ALL_GROUPS ) {
+      $actions = array(
+        'bulk-delete'    => sprintf('%s <input type="hidden" name="_wpnonce" value="%s" />', __('Reset', 'aubu'), wp_create_nonce( 'bpgci_bulk_reset_groups' ) ),
+      );
+    }
     return $actions;
   }
 
   function column_cb($item) {
     return sprintf(
-        '<input type="checkbox" name="group[]" value="%s" />', $item['ID']
+        '<input type="checkbox" class="bpgci_bulk_checkbox" name="group_id[]" value="%s" />', $item['ID']
     );
   }
 
@@ -144,7 +147,6 @@ class BPGCI_List_Table extends WP_List_Table {
     $this->_column_headers = array( $columns, $hidden, $sortable );
 
     $this->process_action();
-    $this->process_bulk_action();
 
     usort( $this->list_data, array( &$this, 'usort_reorder' ) );
 
@@ -161,15 +163,40 @@ class BPGCI_List_Table extends WP_List_Table {
   }
 
   public function process_action() {
-    if ( 'delete' === $this->current_action() ) {
+
+    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/reset.php');
+
+    global $wpdb;
+
+
+    if('bulk-delete' === $this->current_action() ) {
+
+      var_dump($_REQUEST['_wpnonce']);
 
       // In our file that handles the request, verify the nonce.
       $nonce = esc_attr( $_REQUEST['_wpnonce'] );
 
-      if ( ! wp_verify_nonce( $nonce, 'aubu_delete_user' ) ) {
+
+
+      if ( ! wp_verify_nonce( $nonce, 'bpgci_bulk_reset_groups' ) ) {
         die( 'Go get a life, script kiddies!' );
       } else {
+        foreach( $_POST['group_id'] as $group_id ) {
+          BPGCI_reset_data_by_group_id( $wpdb, $group_id );
+          header( 'Location: ?page=buddy-up-report' );
+        }
+      }
 
+    }elseif ( 'delete' === $this->current_action() ) {
+
+      // In our file that handles the request, verify the nonce.
+      $nonce = esc_attr( $_REQUEST['_wpnonce'] );
+
+      if ( ! wp_verify_nonce( $nonce, 'bpgci_reset_group' ) ) {
+        die( 'Go get a life, script kiddies!' );
+      } else {
+        BPGCI_reset_data_by_group_id( $wpdb, $_GET['group_id'] );
+        header( 'Location: ?page=buddy-up-report' );
       }
 
     }

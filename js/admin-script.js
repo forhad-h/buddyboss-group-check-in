@@ -1,13 +1,42 @@
 !(function($) {
   $(document).ready(function() {
 
-    $('#bpgci-delete').on( 'click', function(e) {
+    // Confirm before reset data
+    $('.bpgci_reset').on( 'click', function(e) {
       e.preventDefault();
-      var isConfirm = confirm("Are you sure to delete this group?")
+      var isConfirm = confirm("Are you sure to reset this group?")
       if(isConfirm) {
         $(location).attr('href', $(this).attr('href'))
       }
     } )
+
+    var actionForm = $("#bpgci-action-form");
+
+    if(actionForm.length > 0) {
+      actionForm.on('click', '#doaction', function(e) {
+        e.preventDefault();
+
+        var action = $(this).parent().find('#bulk-action-selector-top option:selected').val() ||
+                  $(this).parent().find('#bulk-action-selector-bottom option:selected').val();
+
+        if(action == -1) return false;
+
+        if($('.bpgci_bulk_checkbox:checked').length < 1) return false;
+
+
+        if( action === 'bulk-delete' ) {
+          confirmMsg = 'Are you sure to reset all selected groups data?';
+        }
+
+        var isConfirm = confirm( confirmMsg );
+
+        if( !isConfirm ) return false;
+
+        $(this).closest('form').submit()
+
+
+      })
+    }
 
 
     if( BPGCI_args.isCheckinEnabled != 0 ) {

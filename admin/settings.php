@@ -2,6 +2,26 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+if( ! function_exists('BPGCI_create_menu_page') ) {
+
+  function BPGCI_create_menu_page() {
+
+    add_menu_page(
+      __( 'BuddyUp', 'bp-group-check-in' ),
+      __( 'BuddyUp', 'bp-group-check-in' ),
+      'publish_pages',
+      BPGCI_MENU_SLUG,
+      '',
+      'dashicons-yes-alt',
+      3
+    );
+  }
+
+  add_action( 'admin_menu', 'BPGCI_create_menu_page', 10 );
+
+
+}
+
 if ( ! function_exists( 'BPGCI_admin_setting_groups_register_fields' ) ) {
    function BPGCI_admin_setting_groups_register_fields( $setting ) {
      $setting->add_section( 'bb_group_check-in', __( 'Group Check-in', '' ) );
