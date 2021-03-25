@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BuddyUp
  * Description: Custom addon of BuddyBoss with group check-in functionality
- * Version:     1.0.0
+ * Version:     1.1.1
  * Text Domain: bp-group-check-in
  * Domain Path: /languages/
  */
