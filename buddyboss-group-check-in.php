@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: BuddyUp
+ * Plugin Name: Buddy Up
  * Description: Custom addon of BuddyBoss with group check-in functionality
- * Version:     1.1.1
+ * Version:     1.2.1
  * Text Domain: bp-group-check-in
  * Domain Path: /languages/
  */
@@ -27,7 +27,7 @@ define_constants( 'BPGCI_ADDON_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define_constants( 'BPGCI_ADDON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define_constants( 'BPGCI_ADDON_PLUGIN', array(
 			'name' => 'buddyboss_group_check_in',
-			'version' => '1.0.0',
+			'version' => '1.2.1',
 			'table_name' => $wpdb->prefix . 'bp_group_check_in',
 			'time_zone' => 'America/Los_Angeles'
 		) );
@@ -125,6 +125,10 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			require_once( 'view/single_group.php' );
 			require_once( 'view/single_member.php' );
 			//require_once( 'admin-option.php' );
+
+			// Habits component
+			require_once( 'bp-habits/bp-habits-admin.php' );
+
 		}
 
 		/**

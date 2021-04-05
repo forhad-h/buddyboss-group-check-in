@@ -5,12 +5,12 @@ defined( 'ABSPATH' ) || exit;
  /*
  To Change group slug
  add_filter( 'bp_get_groups_directory_permalink', function($value) {
- 	$current_types = bp_groups_get_group_type( $_GET['gid'] );
+ 	$current_types = bgci_bp_habits_get_group_type( $_GET['gid'] );
  	return site_url().'/test/';
  });
  */
 
- // add_action( 'bp_groups_admin_load', function( $doaction ) {
+ // add_action( 'bgci_bp_habits_admin_load', function( $doaction ) {
  // 	if( $doaction === 'edit' ) {
  //
  // 	}

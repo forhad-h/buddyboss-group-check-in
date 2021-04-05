@@ -56,7 +56,7 @@ if( ! function_exists( 'BPGCI_member_check_in_subnav_screen_content' ) ) {
 
         require_once( 'check_in_status.php' );
 
-        while ( bp_groups() ) :
+        while ( bgci_bp_habits() ) :
 					bp_the_group();
           $group_id = bp_get_group_id();
           echo BPGCI_check_in_status( $group_id, $member_id );

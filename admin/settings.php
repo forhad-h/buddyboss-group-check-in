@@ -7,8 +7,8 @@ if( ! function_exists('BPGCI_create_menu_page') ) {
   function BPGCI_create_menu_page() {
 
     add_menu_page(
-      __( 'BuddyUp', 'bp-group-check-in' ),
-      __( 'BuddyUp', 'bp-group-check-in' ),
+      __( 'Buddy Up', 'bp-group-check-in' ),
+      __( 'Buddy Up', 'bp-group-check-in' ),
       'publish_pages',
       BPGCI_MENU_SLUG,
       '',

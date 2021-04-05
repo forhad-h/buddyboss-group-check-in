@@ -37,7 +37,7 @@ if( ! function_exists('BPGCI_create_submenu_page') ) {
 
     $hook = add_submenu_page(
       BPGCI_MENU_SLUG,
-      __( 'BuddyUp Report', 'bp-group-check-in' ),
+      __( 'Buddy Up Report', 'bp-group-check-in' ),
       __( 'Report', 'bp-group-check-in' ),
       'publish_pages',
       'buddy-up-report',

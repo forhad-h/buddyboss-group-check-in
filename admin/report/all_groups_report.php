@@ -39,7 +39,7 @@ if( ! function_exists( 'BPGCI_all_groups_report' ) ) {
 
   ?>
     <div class="bpgci_all_groups_report_table wrap">
-      <h1 class="wp-heading-inline"><?= __( 'BuddyUp All Groups Report', 'bp-group-check-in' ); ?></h1>
+      <h1 class="wp-heading-inline"><?= __( 'Buddy Up All Groups Report', 'bp-group-check-in' ); ?></h1>
 
       <form method="post" id="bpgci-action-form">
         <input type="hidden" name="page" value="groups_list_table">

@@ -135,7 +135,7 @@ if( ! function_exists('BPGCI_single_group_report') ) {
 ?>
 
 <div class="bpgci_single_group_report_table wrap">
-  <h1 class="wp-heading-inline"><?= __( "BuddyUp Report of - {$group_name} <span class='sub'>{$report_for}<span>", 'bp-group-check-in' ); ?></h1>
+  <h1 class="wp-heading-inline"><?= __( "Buddy Up Report of - {$group_name} <span class='sub'>{$report_for}<span>", 'bp-group-check-in' ); ?></h1>
   <div class="query_forms">
     <form class="single_date_form" method="get" action="<?= $_SERVER['REQUEST_URI']; ?>" >
       <input type="hidden" name="page" value="<?= $_GET['page']; ?>" />
