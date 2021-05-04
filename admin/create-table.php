@@ -17,7 +17,7 @@ if( ! function_exists('BPGCI_create_table') ) {
                status varchar(20),
                PRIMARY KEY (id)
              ) {$charset_collate}
-    QUERY;
+QUERY;
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 

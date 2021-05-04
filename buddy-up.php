@@ -28,7 +28,7 @@ define_constants( 'BPGCI_ADDON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define_constants( 'BPGCI_ADDON_PLUGIN', array(
 			'name' => 'buddyboss_group_check_in',
 			'version' => '1.2.1',
-			'table_name' => $wpdb->prefix . 'bp_group_check_in',
+			'table_name' => $wpdb->prefix . 'bpgci_bp_habit_check_in',
 			'time_zone' => 'America/Los_Angeles'
 		) );
 define_constants( 'BPGCI_PAGE_TYPE_SINGLE_GROUP', 'single_group' );
@@ -126,9 +126,6 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			require_once( 'view/single_member.php' );
 			//require_once( 'admin-option.php' );
 
-			// Habits component
-			require_once( 'bp-habits/bp-habits-admin.php' );
-
 		}
 
 		/**
@@ -192,13 +189,13 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 
 	function BPGCI_BB_Platform_install_bb_platform_notice() {
 		echo '<div class="error fade"><p>';
-		_e('<strong>BuddyBoss Group Check-In</strong></a> requires the BuddyBoss Platform plugin to work. Please <a href="https://buddyboss.com/platform/" target="_blank">install BuddyBoss Platform</a> first.', '');
+		_e('<strong>Buddy Up</strong></a> requires the BuddyBoss Platform plugin to work. Please <a href="https://buddyboss.com/platform/" target="_blank">install BuddyBoss Platform</a> first.', '');
 		echo '</p></div>';
 	}
 
 	function BPGCI_BB_Platform_update_bb_platform_notice() {
 		echo '<div class="error fade"><p>';
-		_e('<strong>BuddyBoss Group Check-In</strong></a> requires BuddyBoss Platform plugin version 1.2.6 or higher to work. Please update BuddyBoss Platform.', '');
+		_e('<strong>Buddy Up</strong></a> requires BuddyBoss Platform plugin version 1.2.6 or higher to work. Please update BuddyBoss Platform.', '');
 		echo '</p></div>';
 	}
 
