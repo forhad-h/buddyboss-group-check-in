@@ -11,6 +11,11 @@ if( ! function_exists('BPGCI_check_in_status') ) {
     // get group info
     $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
 
+    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/get.php');
+    $has_group_check_in = BPGCI_has_group_check_in($wpdb, $group_id);
+
+    if(!$has_group_check_in) return;
+
     require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
     $group = BPGCI_get_group( $group_id, $member_id );
 

@@ -10,14 +10,14 @@ if( ! function_exists( 'BPGCI_all_groups_report' ) ) {
   <?php
     $list_data = array();
 
-    foreach( $group_ids as $group_id ) {
+    foreach( $group_ids as $gid ) {
       // get group
-      $group = BPGCI_get_group($group_id);
+      $group = BPGCI_get_group($gid);
 
       require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
 
-      $group_id = $group['id'];
-      $group_name = $group['name'];
+      $group_id = $group['id'] ? $group['id'] : (int)$gid;
+      $group_name = $group['name'] ? $group['name'] : '(Not Found!)';
 
       $count_complete = BPGCI_count_data_by_group_and_status( $wpdb, $group_id, 'complete' );
       $count_pending = BPGCI_count_data_by_group_and_status( $wpdb, $group_id, 'pending' );

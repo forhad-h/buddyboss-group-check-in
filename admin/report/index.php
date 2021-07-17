@@ -3,7 +3,6 @@
 defined( 'ABSPATH' ) || exit;
 
 
-
 if( ! function_exists('BPGCI_group_check_in_report_page_content') ) {
   function BPGCI_group_check_in_report_page_content() {
 
