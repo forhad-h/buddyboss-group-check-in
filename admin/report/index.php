@@ -7,7 +7,7 @@ if( ! function_exists('BPGCI_group_check_in_report_page_content') ) {
   function BPGCI_group_check_in_report_page_content() {
 
     require_once('get_data.php');
-    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
+    require_once( BPGCI_PATH . 'data/remote_get.php' );
 
     global $wpdb;
 

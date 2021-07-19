@@ -15,15 +15,15 @@ if( ! function_exists('BPGCI_activation_events') ) {
       BPGCI_create_table( $wpdb );
 
       // create group check-in view page
-      $sql = sprintf("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name='%s'", 'group-check-in');
+      $sql = sprintf("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name='%s'", 'check-in');
 
       if( null === $wpdb->get_row( $sql, "ARRAY_A" ) ) {
 
         $user = wp_get_current_user();
 
         $page_option = array(
-          'post_title' => __('Group Check-in', 'bp-group-check-in'),
-          'post_name' => 'group-check-in',
+          'post_title' => __('Check-in', 'bp-group-check-in'),
+          'post_name' => 'check-in',
           'post_status' => 'publish',
           'post_author' => $user->ID,
           'post_type' => 'page',

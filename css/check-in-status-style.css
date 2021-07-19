@@ -1,10 +1,10 @@
-h2, p {
+/*h2, p {
   color: #333;
-}
+}*/
 
 .bpcgi_divider {
   width: 70%;
-  margin: 10px 0;
+  margin: 7px 0;
   height: 1px;
   background-color: #ddd;
   border-radius: 2px;
@@ -21,9 +21,9 @@ h2, p {
   margin-top: 0;
 }
 
-.bpgci_group_info h2 {
+/*.bpgci_group_info h2 {
   margin-top: 0;
-  font-size: 2rem;
+  font-size: 1.6rem;
   line-height: 1;
   margin-bottom: 0;
 }
@@ -32,7 +32,7 @@ h2, p {
   line-height: 1;
   font-size: 1.5rem;
   margin-bottom: 7px;
-}
+}*/
 
 .result_complete,
 .bpgci_success_notice p,

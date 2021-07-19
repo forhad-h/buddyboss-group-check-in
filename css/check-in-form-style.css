@@ -1,6 +1,6 @@
-h2, p {
+/*h2, p {
   color: #333;
-}
+}*/
 
 .bpcgi_divider {
   width: 70%;
@@ -17,11 +17,12 @@ h2, p {
   padding: 33px;
 }
 
-.bpgci_today p {
+/*.bpgci_today p {
   line-height: 1;
   font-size: 2rem;
   margin-bottom: 7px;
-}
+}*/
+
 #bpgci-form > label {
   display: block;
 }

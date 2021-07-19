@@ -41,7 +41,8 @@
 
     if( BPGCI_args.isCheckinEnabled != 0 ) {
       var checkinPermalink = '';
-      var checkURL = BPGCI_args.siteURL + '/group-check-in?group_id=' + BPGCI_args.group_id;
+      var groupSlug = $('#bp-groups-slug').val();
+      var checkURL = BPGCI_args.siteURL + '/check-in/' + groupSlug;
 
       var groupType = $('#bp-groups-group-type').val();
       var groupSlug = $('#bp-groups-slug').val();

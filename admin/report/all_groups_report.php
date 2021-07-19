@@ -14,7 +14,7 @@ if( ! function_exists( 'BPGCI_all_groups_report' ) ) {
       // get group
       $group = BPGCI_get_group($gid);
 
-      require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
+      require_once( BPGCI_PATH . 'data/count.php' );
 
       $group_id = $group['id'] ? $group['id'] : (int)$gid;
       $group_name = $group['name'] ? $group['name'] : '(Not Found!)';
@@ -46,7 +46,7 @@ if( ! function_exists( 'BPGCI_all_groups_report' ) ) {
 
         <?php
           // require- BPGCI_List_Table
-          require_once( BPGCI_ADDON_PLUGIN_PATH . 'admin/list_table.php' );
+          require_once( BPGCI_PATH . 'admin/list_table.php' );
           $BPGCI_groups_data_table = new BPGCI_List_Table( BPGCI_PAGE_TYPE_ALL_GROUPS, $list_data );
           $BPGCI_groups_data_table->prepare_items();
           $BPGCI_groups_data_table->display();

@@ -1,4 +1,7 @@
 <?php
+/*
+  Template Name: group-page
+*/
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
@@ -11,12 +14,12 @@ if( ! function_exists('BPGCI_check_in_status') ) {
     // get group info
     $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
 
-    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/get.php');
+    require_once( BPGCI_PATH . 'data/get.php');
     $has_group_check_in = BPGCI_has_group_check_in($wpdb, $group_id);
 
     if(!$has_group_check_in) return;
 
-    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
+    require_once( BPGCI_PATH . 'data/remote_get.php' );
     $group = BPGCI_get_group( $group_id, $member_id );
 
     // get members info
@@ -27,7 +30,7 @@ if( ! function_exists('BPGCI_check_in_status') ) {
     $formatted_date = date("F j, Y");
 
     // Get check-in data
-    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
+    require_once( BPGCI_PATH . 'data/count.php' );
     $count_complete = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'complete', $current_date );
     $count_pending = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'pending', $current_date );
     $count_incomplete = BPGCI_count_data_by_user_group_status( $wpdb, $member_id, $group_id, 'incomplete', $current_date );

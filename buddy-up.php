@@ -21,10 +21,17 @@ defined( 'ABSPATH' ) || exit;
 
 global $wpdb;
 
+// get group slug
+$url_path = trim(parse_url(add_query_arg(array()), PHP_URL_PATH), '/');
+$url_path_arr = explode('/', $url_path);
+$page_slug = $url_path_arr[0];
+$group_slug = $url_path_arr[1];
+
+
 define_constants( 'BPGCI_ADDON_PLUGIN_FILE', __FILE__ );
 define_constants( 'BPGCI_ADDON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define_constants( 'BPGCI_ADDON_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define_constants( 'BPGCI_ADDON_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define_constants( 'BPGCI_PATH', plugin_dir_path( __FILE__ ) );
+define_constants( 'BPGCI_URL', plugin_dir_url( __FILE__ ) );
 define_constants( 'BPGCI_ADDON_PLUGIN', array(
 			'name' => 'buddyboss_group_check_in',
 			'version' => '1.2.1',
@@ -34,6 +41,8 @@ define_constants( 'BPGCI_ADDON_PLUGIN', array(
 define_constants( 'BPGCI_PAGE_TYPE_SINGLE_GROUP', 'single_group' );
 define_constants( 'BPGCI_PAGE_TYPE_ALL_GROUPS', 'all_groups' );
 define_constants( 'BPGCI_MENU_SLUG', 'buddy-up' );
+define_constants( 'BPGCI_PPAGE_SLUG', $page_slug );
+define_constants( 'BPGCI_GROUP_SLUG', $group_slug );
 
 date_default_timezone_set( BPGCI_ADDON_PLUGIN['time_zone'] );
 
@@ -105,9 +114,12 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 		public function __construct() {
 			$this->requires();
 
+			add_filter('template_include', array( $this, 'load_group_page' ) );
+
 			// Add link to settings page.
 			add_filter( 'plugin_action_links',               array( $this, 'action_links' ), 10, 2 );
 			add_filter( 'network_admin_plugin_action_links', array( $this, 'action_links' ), 10, 2 );
+			add_filter( 'pre_get_document_title', array($this, 'change_group_page_title') );
 
 			// Set up localisation.
 			$this->load_plugin_textdomain();
@@ -173,6 +185,25 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 					'settings' => '<a href="' . esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) ) . '">' . __( 'Settings', 'bp-group-check-in' ) . '</a>',
 				)
 			);
+		}
+
+		public function load_group_page( $template ) {
+
+
+			if( BPGCI_PPAGE_SLUG === 'check-in' ) {
+				$template = BPGCI_PATH . 'view/group_page.php';
+			}
+
+			return $template;
+
+		}
+
+		public function change_group_page_title($title) {
+			var_dump(bloginfo('name'));
+			if ( BPGCI_PPAGE_SLUG === 'check-in' ) {
+	        //return 'My Custom Title';
+	    }
+	    return $title;
 		}
 
 	}

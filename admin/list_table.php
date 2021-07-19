@@ -164,7 +164,7 @@ class BPGCI_List_Table extends WP_List_Table {
 
   public function process_action() {
 
-    require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/reset.php');
+    require_once( BPGCI_PATH . 'data/reset.php');
 
     global $wpdb;
 

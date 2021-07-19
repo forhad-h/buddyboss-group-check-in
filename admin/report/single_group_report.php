@@ -36,7 +36,7 @@ if( ! function_exists('BPGCI_single_group_report') ) {
 
         $user = get_user_by( 'id', $user_id );
 
-        require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/count.php' );
+        require_once( BPGCI_PATH . 'data/count.php' );
         $total_complete = BPGCI_count_data_by_group_user_and_date_range( $wpdb, $group_id, $user_id, $_GET['from_date'], $_GET['to_date'], 'complete' );
         $total_pending = BPGCI_count_data_by_group_user_and_date_range( $wpdb, $group_id, $user_id, $_GET['from_date'], $_GET['to_date'], 'pending' );
         $total_partially_complete = BPGCI_count_data_by_group_user_and_date_range( $wpdb, $group_id, $user_id, $_GET['from_date'], $_GET['to_date'], 'partially_complete' );
@@ -83,7 +83,7 @@ if( ! function_exists('BPGCI_single_group_report') ) {
   $list_data = array();
 
 
-  require_once( BPGCI_ADDON_PLUGIN_PATH . 'data/remote_get.php' );
+  require_once( BPGCI_PATH . 'data/remote_get.php' );
   $group = BPGCI_get_group($group_id);
   $group_name = $group['name'];
 
@@ -196,7 +196,7 @@ if( ! function_exists('BPGCI_single_group_report') ) {
 
 <?php
   // require- BPGCI_List_Table
-  require_once( BPGCI_ADDON_PLUGIN_PATH . 'admin/list_table.php' );
+  require_once( BPGCI_PATH . 'admin/list_table.php' );
   $BPGCI_groups_data_table = new BPGCI_List_Table( BPGCI_PAGE_TYPE_SINGLE_GROUP, $list_data );
   $BPGCI_groups_data_table->prepare_items();
   $BPGCI_groups_data_table->display();
