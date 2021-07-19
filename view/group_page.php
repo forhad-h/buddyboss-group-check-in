@@ -17,72 +17,69 @@ require_once( 'store_data.php' );
 
     $group = BPGCI_group_by_slug( $wpdb, BPGCI_GROUP_SLUG );
 
-    $group_id = $group->id;
-    $group_name = $group->name;
-    $group_desc = $group->description;
+    if($group) {
+      $group_id = $group->id;
+      $group_name = $group->name;
+      $group_desc = $group->description;
 
-    $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
+      require_once( BPGCI_PATH . 'data/remote_get.php' );
 
+      // get members info
+      $memebers = BPGCI_get_members( $group_id );
 
+      // get current user info
+      $current_user = wp_get_current_user();
+      $user_id = $current_user->ID;
 
+      $is_group_member = BPGCI_is_group_member( $wpdb, $group_id, $user_id);
 
-    require_once( BPGCI_PATH . 'data/remote_get.php' );
+      // store data
+      global $bpgci_success;
+      global $bpgci_error;
+      $current_date =  date('Y-m-d');
 
-    // get members info
-    $memebers = BPGCI_get_members( $group_id );
+      // Is submitted
+      require_once( 'is_submitted.php' );
+      $is_submitted = BPGCI_is_submitted($wpdb, $group_id, $user_id, $current_date);
 
-    // get current user info
-    $current_user = wp_get_current_user();
-    $user_id = $current_user->ID;
+      if( $_SERVER['REQUEST_METHOD'] == 'POST' && !$is_submitted ) {
 
-    // store data
-    global $bpgci_success;
-    global $bpgci_error;
-    $current_date =  date('Y-m-d');
+        $data = array(
+          'group_id' => $group->id,
+          'user_id' => $current_user->ID,
+          'date' => $current_date,
+          'status' => $_POST['status']
+        );
 
-    // Is submitted
-    require_once( 'is_submitted.php' );
-    $is_submitted = BPGCI_is_submitted($wpdb, $group_id, $user_id, $current_date);
+        require_once( 'store_data.php' );
 
-    if( $_SERVER['REQUEST_METHOD'] == 'POST' && !$is_submitted ) {
+        BPGCI_store_data( $wpdb, $data );
+      }
 
-      $data = array(
-        'group_id' => $group['id'],
-        'user_id' => $current_user->ID,
-        'date' => $current_date,
-        'status' => $_POST['status']
-      );
+      // Get check-in data
+      $formatted_date = date("F j, Y, g:i a");
 
-      require_once( 'store_data.php' );
+      require_once( BPGCI_PATH . 'data/count.php' );
+      $count_complete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'complete', $current_date );
+      $count_pending = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'pending', $current_date );
+      $count_incomplete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'incomplete', $current_date );
+      $count_partially_complete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'partially_complete', $current_date );
 
-      BPGCI_store_data( $wpdb, $data );
+      // enqueue view stylesheet
+      wp_enqueue_style( 'bgci-view-css' );
     }
-
-    // Get check-in data
-    $formatted_date = date("F j, Y, g:i a");
-
-    require_once( BPGCI_PATH . 'data/count.php' );
-    $count_complete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'complete', $current_date );
-    $count_pending = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'pending', $current_date );
-    $count_incomplete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'incomplete', $current_date );
-    $count_partially_complete = BPGCI_count_data_by_group_status_and_date( $wpdb, $group_id, 'partially_complete', $current_date );
-
-    // enqueue view stylesheet
-    wp_enqueue_style( 'bgci-view-css' );
-
 ?>
 
-<?php if ( ! $group_id ): ?>
+<?php if ( ! $group ): ?>
   <p class="bpgci_notice"><strong>Not found!</strong> Group not exists.</p>
-<?php return; endif; ?>
 
-<?php
-   // TODO:// Retrict content for group members only
-?>
+<?php elseif ( ! $is_group_member ): ?>
+  <p class="bpgci_notice"><strong>Access forbidden!</strong> You are not allowed to see contents.</p>
 
-<?php if ( ! $is_group_check_in_enabled ): ?>
-  <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable', 'bp-group-check-in' ); ?></a></p>
-<?php  return; endif; ?>
+<?php elseif ( ! absint(bp_get_option( 'bpg-enable-check-in', 0 )) ): ?>
+  <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable Now', 'bp-group-check-in' ); ?></a></p>
+
+<?php else: ?>
 
 <div id="group-check-in-wrapper">
   <div class="bpgci_group_info">
@@ -132,24 +129,8 @@ require_once( 'store_data.php' );
 
 </div>
 
+<?php endif;?>
+
 
 
 <?php get_footer(); ?>
-
-
-
-
-
-<?php
-
-if( !function_exists( 'BPGCI_get_content' ) ) {
-   function BPGCI_get_content() {
-
-?>
-
-
-
-<?php
-
-   }
-}

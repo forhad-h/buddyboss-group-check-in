@@ -15,6 +15,8 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+//TODO: need to store this absint(bp_get_option( 'bpg-enable-check-in', 0 )) in a constant
+
 /**
  * Define WCE Constants
  */
@@ -22,10 +24,16 @@ defined( 'ABSPATH' ) || exit;
 global $wpdb;
 
 // get group slug
+$page_slug = '';
+$group_slug = '';
 $url_path = trim(parse_url(add_query_arg(array()), PHP_URL_PATH), '/');
-$url_path_arr = explode('/', $url_path);
-$page_slug = $url_path_arr[0];
-$group_slug = $url_path_arr[1];
+if($url_path) {
+	$url_path_arr = explode('/', $url_path);
+	if( count($url_path_arr) > 1 ) {
+		$page_slug = $url_path_arr[0];
+		$group_slug = $url_path_arr[1];
+	}
+}
 
 
 define_constants( 'BPGCI_ADDON_PLUGIN_FILE', __FILE__ );
@@ -43,6 +51,7 @@ define_constants( 'BPGCI_PAGE_TYPE_ALL_GROUPS', 'all_groups' );
 define_constants( 'BPGCI_MENU_SLUG', 'buddy-up' );
 define_constants( 'BPGCI_PPAGE_SLUG', $page_slug );
 define_constants( 'BPGCI_GROUP_SLUG', $group_slug );
+
 
 date_default_timezone_set( BPGCI_ADDON_PLUGIN['time_zone'] );
 
@@ -119,7 +128,7 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			// Add link to settings page.
 			add_filter( 'plugin_action_links',               array( $this, 'action_links' ), 10, 2 );
 			add_filter( 'network_admin_plugin_action_links', array( $this, 'action_links' ), 10, 2 );
-			add_filter( 'pre_get_document_title', array($this, 'change_group_page_title') );
+			add_filter( 'document_title_parts', array($this, 'change_group_page_title') );
 
 			// Set up localisation.
 			$this->load_plugin_textdomain();
@@ -132,11 +141,11 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			require_once( 'admin/enqueue-scripts.php' );
 			require_once( 'admin/settings.php' );
 			require_once( 'admin/report/index.php' );
+			require_once( 'admin/group_postbox.php' );
 
 			require_once( 'view/shortcode.php' );
 			require_once( 'view/single_group.php' );
 			require_once( 'view/single_member.php' );
-			//require_once( 'admin-option.php' );
 
 		}
 
@@ -198,12 +207,11 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 
 		}
 
-		public function change_group_page_title($title) {
-			var_dump(bloginfo('name'));
+		public function change_group_page_title($title_parts) {
 			if ( BPGCI_PPAGE_SLUG === 'check-in' ) {
-	        //return 'My Custom Title';
+	        $title_parts['title'] = ucwords( str_replace( '-', ' ', esc_html(BPGCI_GROUP_SLUG)) );
 	    }
-	    return $title;
+	    return $title_parts;
 		}
 
 	}

@@ -25,9 +25,7 @@ if( ! function_exists( 'BPGCI_group_check_in_subnav' ) ) {
 		 }
 	 }
 
-   $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
-
-   if( $is_group_check_in_enabled ) {
+   if( absint(bp_get_option( 'bpg-enable-check-in', 0 )) ) {
 	   add_action( 'bp_init', 'BPGCI_group_check_in_subnav' );
    }
 

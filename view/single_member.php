@@ -20,9 +20,7 @@ if( ! function_exists( 'BPGCI_member_check_in_subnav' ) ) {
   	bp_core_new_nav_item( $args );
   }
 
-  $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
-
-  if( $is_group_check_in_enabled ) {
+  if( absint(bp_get_option( 'bpg-enable-check-in', 0 )) ) {
     add_action( 'bp_setup_nav', 'BPGCI_member_check_in_subnav' );
   }
 

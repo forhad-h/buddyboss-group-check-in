@@ -14,7 +14,6 @@ if( ! function_exists('BPGCI_template') ) {
 
     // get group info
     $group_id = $_GET ? $_GET['group_id'] ? $_GET['group_id'] : null : null;
-    $is_group_check_in_enabled = absint(bp_get_option( 'bpg-enable-check-in', 0 ));
 
     require_once( BPGCI_PATH . 'data/remote_get.php' );
     $group = BPGCI_get_group( $group_id );
@@ -71,7 +70,7 @@ if( ! function_exists('BPGCI_template') ) {
       <p class="bpgci_notice"><strong>Access forbidden!</strong> You are not allowed to see contents.</p>
     <?php  return; endif; ?>
 
-    <?php if ( ! $is_group_check_in_enabled ): ?>
+    <?php if ( ! absint(bp_get_option( 'bpg-enable-check-in', 0 )) ): ?>
       <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable', 'bp-group-check-in' ); ?></a></p>
     <?php  return; endif; ?>
 
