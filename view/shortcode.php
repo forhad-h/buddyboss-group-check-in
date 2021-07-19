@@ -84,7 +84,7 @@ if( ! function_exists('BPGCI_template') ) {
       <div class="bpcgi_divider"></div>
 
       <div class="bpgci_today">
-        <p><?= $formatted_date; ?></p>
+        <h2><?= $formatted_date; ?></h2>
       </div>
 
       <div class="bpgci_total_result">

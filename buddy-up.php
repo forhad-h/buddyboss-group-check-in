@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Buddy Up
  * Description: Custom addon of BuddyBoss with group check-in functionality
- * Version:     1.2.1
+ * Version:     1.3.0
  * Text Domain: bp-group-check-in
  * Domain Path: /languages/
  */
@@ -123,12 +123,20 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 		public function __construct() {
 			$this->requires();
 
-			add_filter('template_include', array( $this, 'load_group_page' ) );
+			if (
+				is_plugin_active( 'wordpress-seo/wp-seo.php' ) ||
+			  is_plugin_active( 'wordpress-seo-premium/wp-seo-premium.php' ) ) {
+			       add_filter( 'wpseo_title', array($this, 'yoast_change_group_page_title') );
+			}else {
+			   add_filter( 'document_title_parts', array($this, 'change_group_page_title') );
+			}
 
+
+			add_filter('template_include', array( $this, 'load_group_page' ) );
 			// Add link to settings page.
 			add_filter( 'plugin_action_links',               array( $this, 'action_links' ), 10, 2 );
 			add_filter( 'network_admin_plugin_action_links', array( $this, 'action_links' ), 10, 2 );
-			add_filter( 'document_title_parts', array($this, 'change_group_page_title') );
+
 
 			// Set up localisation.
 			$this->load_plugin_textdomain();
@@ -205,6 +213,19 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 
 			return $template;
 
+		}
+
+		public function yoast_change_group_page_title($title) {
+
+			if ( BPGCI_PPAGE_SLUG === 'check-in' ) {
+				$new_title = ucwords( str_replace( '-', ' ', esc_html(BPGCI_GROUP_SLUG)) );
+				if (strpos($title, 'Page not found') !== false) {
+				  $title = str_replace('Page not found', $new_title, $title );
+				}else {
+					$title = $new_title;
+				}
+	    }
+	    return $title;
 		}
 
 		public function change_group_page_title($title_parts) {

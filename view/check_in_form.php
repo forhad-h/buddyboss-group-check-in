@@ -71,7 +71,7 @@ if( ! function_exists('BPGCI_check_in_form') ) {
     <div class="group_check_in_form_wrapper">
 
       <div class="bpgci_today">
-        <p>Today - <?= $formatted_date; ?></p>
+        <h2>Today - <?= $formatted_date; ?></h2>
       </div>
 
       <div class="bpcgi_divider"></div>
