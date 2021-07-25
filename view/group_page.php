@@ -76,8 +76,8 @@ require_once( 'store_data.php' );
 <?php elseif ( ! $is_group_member ): ?>
   <p class="bpgci_notice"><strong>Access forbidden!</strong> You are not allowed to see contents.</p>
 
-<?php elseif ( ! absint(bp_get_option( 'bpg-enable-check-in', 0 )) ): ?>
-  <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable Now', 'bp-group-check-in' ); ?></a></p>
+<?php elseif ( ! BPGCI_IS_ENABLED ): ?>
+  <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group. <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?php //echo __( 'Enable Now', 'bp-group-check-in' ); ?></a></p>
 
 <?php else: ?>
 

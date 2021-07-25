@@ -7,6 +7,10 @@
  * Domain Path: /languages/
  */
 
+/*
+  Option name from divi-up - du_option_buddy_up_check_in
+*/
+
 /**
  * This file should always remain compatible with the minimum version of
  * PHP supported by WordPress.
@@ -14,8 +18,6 @@
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
-
-//TODO: need to store this absint(bp_get_option( 'bpg-enable-check-in', 0 )) in a constant
 
 /**
  * Define WCE Constants
@@ -27,14 +29,21 @@ global $wpdb;
 $page_slug = '';
 $group_slug = '';
 $url_path = trim(parse_url(add_query_arg(array()), PHP_URL_PATH), '/');
+
 if($url_path) {
+
 	$url_path_arr = explode('/', $url_path);
+	$page_slug_index = count($url_path_arr) - 1 - 1;
+	$group_slug_index = count($url_path_arr) - 1;
+
 	if( count($url_path_arr) > 1 ) {
-		$page_slug = $url_path_arr[0];
-		$group_slug = $url_path_arr[1];
+		$page_slug = $url_path_arr[ $page_slug_index ];
+		$group_slug = $url_path_arr[ $group_slug_index ];
 	}
+
 }
 
+$bpgci_is_enabled = absint(get_option( 'bpg-enable-check-in', 0 )) && get_option( 'du_option_buddy_up_check_in', 'off' );
 
 define_constants( 'BPGCI_ADDON_PLUGIN_FILE', __FILE__ );
 define_constants( 'BPGCI_ADDON_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -51,7 +60,7 @@ define_constants( 'BPGCI_PAGE_TYPE_ALL_GROUPS', 'all_groups' );
 define_constants( 'BPGCI_MENU_SLUG', 'buddy-up' );
 define_constants( 'BPGCI_PPAGE_SLUG', $page_slug );
 define_constants( 'BPGCI_GROUP_SLUG', $group_slug );
-
+define_constants( 'BPGCI_IS_ENABLED', $bpgci_is_enabled );
 
 date_default_timezone_set( BPGCI_ADDON_PLUGIN['time_zone'] );
 
@@ -131,7 +140,6 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			   add_filter( 'document_title_parts', array($this, 'change_group_page_title') );
 			}
 
-
 			add_filter('template_include', array( $this, 'load_group_page' ) );
 			// Add link to settings page.
 			add_filter( 'plugin_action_links',               array( $this, 'action_links' ), 10, 2 );
@@ -206,7 +214,6 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 
 		public function load_group_page( $template ) {
 
-
 			if( BPGCI_PPAGE_SLUG === 'check-in' ) {
 				$template = BPGCI_PATH . 'view/group_page.php';
 			}
@@ -273,7 +280,7 @@ if ( ! class_exists( 'BPGCI_Addon' ) ) {
 			return;
 		}
 
-		if ( version_compare( BP_PLATFORM_VERSION,'1.2.6', '<' ) ) {
+		if ( version_compare( BP_PLATFORM_VERSION, '1.2.6', '<' ) ) {
 			add_action( 'admin_notices', 'BPGCI_BB_Platform_update_bb_platform_notice' );
 			add_action( 'network_admin_notices', 'BPGCI_BB_Platform_update_bb_platform_notice' );
 			return;

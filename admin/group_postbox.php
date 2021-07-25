@@ -5,7 +5,7 @@ if( ! function_exists('BPGCI_group_post_box') ) {
 
      $doaction = bp_admin_list_table_current_bulk_action();
 
-     if( 'edit' == $doaction && ! empty( $_GET['gid'] ) && absint(bp_get_option( 'bpg-enable-check-in', 0 )) ) {
+     if( 'edit' == $doaction && ! empty( $_GET['gid'] ) && BPGCI_IS_ENABLED ) {
          add_meta_box(
            'bpgci_check_in',
            __( 'Check-In', 'bp-group-check-in' ),

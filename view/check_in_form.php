@@ -63,7 +63,7 @@ if( ! function_exists('BPGCI_check_in_form') ) {
       <p class="bpgci_notice"><strong>Access forbidden!</strong> You are not allowed to see contents.</p>
     <?php  return ob_get_clean(); endif; ?>
 
-    <?php if ( ! absint(bp_get_option( 'bpg-enable-check-in', 0 )) ): ?>
+    <?php if ( ! BPGCI_IS_ENABLED ): ?>
       <p class="bpgci_notice"><strong>Not enabled!</strong> Check-in option is not enabled for group - <a href="<?= esc_url( bp_get_admin_url( 'admin.php?page=bp-settings&tab=bp-groups' ) )?>" target="_new"> <?= __( 'Enable', 'bp-group-check-in' ); ?></a></p>
     <?php  return ob_get_clean(); endif; ?>
 

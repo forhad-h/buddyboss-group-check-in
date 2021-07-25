@@ -45,6 +45,6 @@ if ( ! function_exists( 'BPGCI_admin_general_setting_callback_my_addon' ) ) {
 
 if ( ! function_exists( 'BPGCI_enable_check_in' ) ) {
  function BPGCI_enable_check_in( $default = false ) {
-   return (bool) apply_filters( 'BPGCI_enable_check_in', (bool) bp_get_option( 'bpg-enable-check-in', $default ) );
+   return (bool) apply_filters( 'BPGCI_enable_check_in', (bool) get_option( 'bpg-enable-check-in', $default ) );
  }
 }

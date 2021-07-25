@@ -9,7 +9,7 @@ if ( ! function_exists( 'BPGCI_admin_enqueue_script' ) ) {
 		wp_enqueue_script( 'bgci-admin-js', BPGCI_URL . 'js/admin-script.js' );
 		wp_localize_script( 'bgci-admin-js', 'BPGCI_args', array(
 			'siteURL' => esc_url(site_url()),
-			'isCheckinEnabled' => absint(bp_get_option( 'bpg-enable-check-in', 0 ))
+			'isCheckinEnabled' => BPGCI_IS_ENABLED
 		));
 
 	}
